@@ -13,7 +13,8 @@ func SetupRouter() *gin.Engine {
 	// router := gin.New()
 	router := gin.Default()
 	router.GET("/hello", handlers.UrlHandler)
-	router.POST("/api/v1/url", handlers.CreateShortUrl)
+	// router.GET("/api/url-shortener/v1/url", handlers.CreateShortUrl)
+	router.POST("/api/url-shortener/v1/url", handlers.CreateShortUrl)
 	return router
 }
 
