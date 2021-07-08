@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-projects/router"
+	"url-shortener/router"
 )
 
 func Setup() {

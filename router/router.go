@@ -1,7 +1,7 @@
 package router
 
 import (
-	"go-projects/handlers"
+	"url-shortener/handlers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +14,7 @@ func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.GET("/hello", handlers.UrlHandler)
 	// router.GET("/api/url-shortener/v1/url", handlers.CreateShortUrl)
-	router.POST("/api/url-shortener/v1/url", handlers.CreateShortUrl)
+	router.POST("/api/url-shortener/v1/url", handlers.GenerateShortUrl)
 	return router
 }
 
