@@ -1,13 +1,13 @@
 package dto
 
 type UrlShortenerRequest struct {
-	LongUrl string `json:"long_url" binding:"required"`
-	// LongUrl string `json:"long_url"`
+	// LongUrl string `json:"long_url" binding:"required, NotEmptyValidator"`
+	LongUrl string `json:"longUrl" binding:"required"`
 }
 
 type UrlResponse struct {
-	LongUrl  string `json:"long_url"`
-	ShortUrl string `json:"short_url"`
+	LongUrl  string `json:"longUrl"`
+	ShortUrl string `json:"shortUrl"`
 }
 
 type RedirectRequest struct {

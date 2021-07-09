@@ -9,7 +9,6 @@ type ErrorInfo struct {
 
 type ErrorBody struct {
 	Code    int    `json:"code"`
-	Status  string `json:"status"`
 	Message string `json:"message"`
 }
 
@@ -17,7 +16,22 @@ var BadRequestError = ErrorInfo{
 	HttpStatus: http.StatusBadRequest,
 	ErrorBody: ErrorBody{
 		Code:    400,
-		Status:  "Bad request",
 		Message: "Bad request",
+	},
+}
+
+var UrlNotFoundError = ErrorInfo{
+	HttpStatus: http.StatusNotFound,
+	ErrorBody: ErrorBody{
+		Code:    404,
+		Message: "URL is not found",
+	},
+}
+
+var InternalServerError = ErrorInfo{
+	HttpStatus: http.StatusInternalServerError,
+	ErrorBody: ErrorBody{
+		Code:    500,
+		Message: "Internal Server Error",
 	},
 }
