@@ -20,11 +20,19 @@ var BadRequestError = ErrorInfo{
 	},
 }
 
+var AliasForbidenError = ErrorInfo{
+	HttpStatus: http.StatusForbidden,
+	ErrorBody: ErrorBody{
+		Code:    403,
+		Message: "Invalid alias.",
+	},
+}
+
 var UrlNotFoundError = ErrorInfo{
 	HttpStatus: http.StatusNotFound,
 	ErrorBody: ErrorBody{
 		Code:    404,
-		Message: "URL is not found",
+		Message: "URL is not found.",
 	},
 }
 

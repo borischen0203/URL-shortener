@@ -1,5 +1,13 @@
 package database
 
+/**
+ * This database mainly set up mongo db
+ *
+ * @author: Boris
+ * @version: 2021-07-08
+ *
+ */
+
 import (
 	"context"
 	"log"
@@ -10,7 +18,7 @@ import (
 
 var UrlCollection *mongo.Collection
 
-//InitMongoDB function start to connect to mongo Database
+//Setup mongo connection
 func Setup() {
 	clientOptions := options.Client().ApplyURI("mongodb+srv://root:root@cluster0.qfx1p.mongodb.net/short-url?retryWrites=true&w=majority")
 	client, err := mongo.Connect(context.TODO(), clientOptions)
