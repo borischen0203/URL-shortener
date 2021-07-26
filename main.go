@@ -1,13 +1,15 @@
 package main
 
 import (
+	"url-shortener/config"
 	"url-shortener/database"
 	"url-shortener/router"
 )
 
 func Setup() {
-	router.Setup()
+	config.Setup()
 	database.Setup()
+	router.Setup()
 }
 
 func main() {
