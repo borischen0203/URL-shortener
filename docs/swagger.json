@@ -1,0 +1,85 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/url-shortener/v1/url": {
+            "post": {
+                "description": "create shortening url",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shorten Url"
+                ],
+                "summary": "create shortening url",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UrlShortenerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "summary": "health checker API",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/version": {
+            "get": {
+                "summary": "service version API",
+                "responses": {
+                    "200": {
+                        "description": "0.0.1",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.UrlShortenerRequest": {
+            "type": "object",
+            "required": [
+                "longUrl"
+            ],
+            "properties": {
+                "alias": {
+                    "type": "string"
+                },
+                "longUrl": {
+                    "description": "LongUrl string `json:\"long_url\" binding:\"required, NotEmptyValidator\"`",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

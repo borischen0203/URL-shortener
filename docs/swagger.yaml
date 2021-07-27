@@ -1,0 +1,53 @@
+definitions:
+  dto.UrlShortenerRequest:
+    properties:
+      alias:
+        type: string
+      longUrl:
+        description: LongUrl string `json:"long_url" binding:"required, NotEmptyValidator"`
+        type: string
+    required:
+    - longUrl
+    type: object
+info:
+  contact: {}
+paths:
+  /api/url-shortener/v1/url:
+    post:
+      consumes:
+      - application/json
+      description: create shortening url
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UrlShortenerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: create shortening url
+      tags:
+      - Shorten Url
+  /health:
+    get:
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: health checker API
+  /version:
+    get:
+      responses:
+        "200":
+          description: 0.0.1
+          schema:
+            type: string
+      summary: service version API
+swagger: "2.0"
