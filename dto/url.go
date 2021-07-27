@@ -21,3 +21,10 @@ type UrlResponse struct {
 type RedirectRequest struct {
 	RedirectURL string `json:"redirect_url"`
 }
+
+func (r UrlShortenerRequest) Validate() bool {
+	if r.LongUrl == "" {
+		return false
+	}
+	return true
+}

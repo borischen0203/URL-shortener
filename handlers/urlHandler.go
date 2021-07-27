@@ -2,10 +2,13 @@ package handlers
 
 /***
  *
+ * This file mainly handle URL
  *
- * Version: 2021/07/15
+ * @author: Boris
+ * @version: 2021-07-08
  *
  */
+
 import (
 	"log"
 	"net/http"
@@ -13,50 +16,39 @@ import (
 	"url-shortener/database"
 	"url-shortener/dto"
 	"url-shortener/errors"
+	"url-shortener/logger"
 	"url-shortener/services"
 
 	"github.com/gin-gonic/gin"
 )
 
-//Generate short URL by long URL
+// Generate short URL by long URL
+// @Summary create shortening url
+// @Description create shortening url
+// @Tags Shorten Url
+// @Accept json
+// @Produce json
+// @Param body body dto.UrlShortenerRequest true "body"
+// @Success 200 {string} string "ok"
+// @Router /api/url-shortener/v1/url [post]
 func GenerateShortUrl(c *gin.Context) {
 	request := dto.UrlShortenerRequest{}
-	if err := c.BindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	var response dto.UrlResponse
-	//Alias requirement
-	if len(request.Alias) > 0 {
-		res, err := services.CreateShortUrlByAlias(request.LongUrl, request.Alias)
-		if err != nil {
-			log.Printf("[GenerateShortUrl] create url with alias error: %v\n", err)
-			c.JSON(http.StatusInternalServerError, errors.InternalServerError)
-			return
-		}
-		//Alias is used
-		if (res == database.Url{}) {
-			c.JSON(http.StatusForbidden, errors.AliasForbidenError)
-			return
-		}
-
-		response.LongUrl = res.LongUrl
-		response.ShortUrl = res.ShortUrl
-		c.JSON(http.StatusOK, response)
-		return
-	}
-
-	res, err := services.CreateShortUrl(request.LongUrl)
-	if err != nil {
-		log.Printf("[GenerateShortUrl] create url error: %v\n", err)
+	response := dto.UrlResponse{}
+	c.BindJSON(&request)
+	logger.Info.Printf("[GenerateShortUrlHandler] request=%+v\n", request)
+	statusCode, result, err := services.GenerateShortUrlService(request, response)
+	switch statusCode {
+	case 200:
+		c.JSON(http.StatusOK, result)
+	case 400:
+		c.JSON(http.StatusBadRequest, err)
+	case 403:
+		c.JSON(http.StatusForbidden, err)
+	case 500:
+		c.JSON(http.StatusInternalServerError, err)
+	default:
 		c.JSON(http.StatusInternalServerError, errors.InternalServerError)
-		return
 	}
-	response.LongUrl = res.LongUrl
-	response.ShortUrl = res.ShortUrl
-
-	c.JSON(http.StatusOK, response)
 }
 
 func GetLongUrl(c *gin.Context) {

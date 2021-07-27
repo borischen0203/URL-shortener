@@ -7,8 +7,10 @@ import (
 	"testing"
 
 	"encoding/json"
+	"url-shortener/config"
 	"url-shortener/database"
 	"url-shortener/dto"
+	"url-shortener/logger"
 	"url-shortener/router"
 
 	"github.com/stretchr/testify/assert"
@@ -19,6 +21,8 @@ import (
 var GenerateUrl = "/api/url-shortener/v1/url"
 
 func TestGenerateUrl(t *testing.T) {
+	logger.Setup()
+	config.Setup()
 	database.Setup()
 	router := router.SetupRouter()
 	w := httptest.NewRecorder()
