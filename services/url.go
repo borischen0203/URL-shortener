@@ -46,7 +46,7 @@ func GenerateShortUrlService(request dto.UrlShortenerRequest, response dto.UrlRe
 		return 200, jsonMapping(result, response), e.NoError
 	}
 
-	result, err := CreatShortUrl(request)
+	result, err := CreateShortUrl(request)
 	if err != nil {
 		logger.Error.Printf("[GenerateShortUrlService] creat short url error: %v\n", err)
 		return 500, response, e.InternalServerError // server error
@@ -82,7 +82,7 @@ func CreateShortUrlByAlias(request dto.UrlShortenerRequest) (database.Url, error
 }
 
 //Create short url without alias
-func CreatShortUrl(request dto.UrlShortenerRequest) (database.Url, error) {
+func CreateShortUrl(request dto.UrlShortenerRequest) (database.Url, error) {
 	//check if long url already exist
 	QueryResult, err := GetShortUrlByLongUrl(request.LongUrl)
 	if err != nil {
