@@ -10,7 +10,6 @@ package database
 
 import (
 	"context"
-	"log"
 	"url-shortener/config"
 	"url-shortener/logger"
 
@@ -37,9 +36,9 @@ func Setup() {
 
 	logger.Info.Printf("Connected to MongoDB")
 
+	// Set database and collection
 	UrlCollection = client.Database(config.Env.DBName).Collection(config.Env.UrlInfoCollectionName)
 	if UrlCollection == nil {
-		log.Fatalf("collection is nil")
+		logger.Error.Fatalf("collection: %s is nil", config.Env.UrlInfoCollectionName)
 	}
-	log.Println("SetupDB successful")
 }

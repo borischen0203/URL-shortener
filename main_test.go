@@ -3,11 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"os/exec"
+
 	"strings"
 	"testing"
 	"url-shortener/config"
@@ -17,6 +17,7 @@ import (
 	"url-shortener/logger"
 	"url-shortener/router"
 
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -60,10 +61,10 @@ func TestVersion(t *testing.T) {
 
 //Should return 200 with long URL and short URL(generate new one) when long URL is unused
 func TestGenerateUrl(t *testing.T) {
-
 	logger.Setup()
 	config.Setup()
 	database.Setup()
+
 	router := router.SetupRouter()
 	w := httptest.NewRecorder()
 
@@ -93,6 +94,34 @@ func TestGenerateUrl(t *testing.T) {
 //Should return 200 with long URL and short URL(generate new one wt alias) when alias is unused
 
 //Should return 200 with long URL and short URL(existing) when alias is used by this input long URL
+func TestInvalidAlias(t *testing.T) {
+	logger.Setup()
+	config.Setup()
+	database.Setup()
+
+	router := router.SetupRouter()
+	w := httptest.NewRecorder()
+
+	requestBody := dto.UrlShortenerRequest{
+		LongUrl: "https://www.youtube.com/",
+		Alias:   "myYoutube",
+	}
+	responseBody := dto.UrlResponse{
+		LongUrl:  "https://www.youtube.com/",
+		ShortUrl: "http://localhost:8080/myYoutube",
+	}
+
+	request, _ := json.Marshal(requestBody)
+	expected, _ := json.Marshal(responseBody)
+
+	req, _ := http.NewRequest(http.MethodPost, GenerateUrl, strings.NewReader(string(request)))
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, string(expected), w.Body.String())
+	fmt.Println(w.Body.String())
+}
 
 //Should return 400 when longUrl field is empty
 func TestEmptyLongUrlFields(t *testing.T) {
@@ -162,42 +191,29 @@ func TestAliasIsInvalid(t *testing.T) {
 }
 
 //Should return 403 when alias is used by the other long URL
-
-//Should return 404 when short url is not found
-
-//Should return 500 when internal server error
-func TestInternalServerError(t *testing.T) {
-	out, err := exec.Command("/bin/sh", "../env.sh").Output()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(string(out))
-
-	if err != nil {
-		log.Fatal(err)
-	}
+func TestForbiddenAlias(t *testing.T) {
 	logger.Setup()
 	config.Setup()
 	database.Setup()
+
 	router := router.SetupRouter()
 	w := httptest.NewRecorder()
 
 	requestBody := dto.UrlShortenerRequest{
-		LongUrl: "https://google.com",
-		Alias:   "",
+		LongUrl: "https://www.gogole.com/",
+		Alias:   "myYoutube",
 	}
 
 	request, _ := json.Marshal(requestBody)
+	expected, _ := json.Marshal(errors.AliasForbidenError)
 
 	req, _ := http.NewRequest(http.MethodPost, GenerateUrl, strings.NewReader(string(request)))
+
 	router.ServeHTTP(w, req)
 
-	actual := w.Body.String()
-	expected, _ := json.Marshal(errors.InternalServerError)
-
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, string(expected), actual)
+	assert.Equal(t, http.StatusForbidden, w.Code)
+	assert.Equal(t, string(expected), w.Body.String())
 	fmt.Println(w.Body.String())
 }
+
+//Should return 404 when short url is not found

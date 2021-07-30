@@ -27,11 +27,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+//generate short URL service
 func GenerateShortUrlService(request dto.UrlShortenerRequest, response dto.UrlResponse) (int64, dto.UrlResponse, e.ErrorInfo) {
 	if ok, err := request.Validate(); !ok {
 		return 400, response, err
 	}
 
+	//generate short url by alias
 	if isAlias(request) {
 		result, err := CreateShortUrlByAlias(request)
 		if err != nil {
@@ -46,10 +48,24 @@ func GenerateShortUrlService(request dto.UrlShortenerRequest, response dto.UrlRe
 		return 200, jsonMapping(result, response), e.NoError
 	}
 
+	//generate short url without alias
 	result, err := CreateShortUrl(request)
 	if err != nil {
 		logger.Error.Printf("[GenerateShortUrlService] creat short url error: %v\n", err)
 		return 500, response, e.InternalServerError // server error
+	}
+	return 200, jsonMapping(result, response), e.NoError
+}
+
+func GetOriginalUrlService(request dto.RedirectRequest, response dto.UrlResponse) (int64, dto.UrlResponse, e.ErrorInfo) {
+	result, err := GetUrlById(request.Id)
+	if err != nil {
+		logger.Error.Printf("[GetOriginalUrlService] search db error: %v\n", err)
+		return 500, response, e.InternalServerError
+	}
+	if (result == database.Url{}) {
+		logger.Info.Printf("[GetOriginalUrlService] short Url is not found: %v\n", request)
+		return 404, response, e.UrlNotFoundError
 	}
 	return 200, jsonMapping(result, response), e.NoError
 }
@@ -157,7 +173,7 @@ func InsertUrlDocument(s ...string) (database.Url, error) {
 		url.Id = generateUniqueID()
 		shortId = url.Id
 	}
-	urlPrefix := config.Env.URL_HOST
+	urlPrefix := config.Env.HOST
 	url.ShortUrl = urlPrefix + shortId
 
 	if _, err := collection.InsertOne(context.TODO(), url); err != nil {

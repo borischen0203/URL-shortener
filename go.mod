@@ -14,6 +14,7 @@ require (
 	github.com/go-playground/validator/v10 v10.8.0 // indirect
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/gookit/validate v1.2.11 // indirect
+	github.com/joho/godotenv v1.3.0
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/nsf/gocode v0.0.0-20190302080247-5bee97b48836 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect

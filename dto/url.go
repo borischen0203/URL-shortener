@@ -23,7 +23,7 @@ type UrlResponse struct {
 }
 
 type RedirectRequest struct {
-	RedirectURL string `json:"redirect_url"`
+	Id string `param:"id"`
 }
 
 func (r UrlShortenerRequest) Validate() (bool, e.ErrorInfo) {
@@ -36,6 +36,7 @@ func (r UrlShortenerRequest) Validate() (bool, e.ErrorInfo) {
 	return true, e.NoError
 }
 
+//Validate long url input
 func (r UrlShortenerRequest) IsValidAlias() bool {
 	if ok, _ := regexp.MatchString("^[a-zA-Z0-9]{0,30}$", r.Alias); !ok {
 		return false
@@ -43,6 +44,7 @@ func (r UrlShortenerRequest) IsValidAlias() bool {
 	return true
 }
 
+//Validate long url input
 func (r UrlShortenerRequest) IsEmpty() bool {
 	return r.LongUrl == ""
 }

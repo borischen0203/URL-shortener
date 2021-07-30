@@ -16,7 +16,10 @@ func (e ErrorInfo) IsNil() bool {
 
 var NoError = ErrorInfo{}
 
-var InvalidLongUrlError = ErrorInfo{Code: 40001, Msg: "Invalid long url"}
+var InvalidLongUrlError = ErrorInfo{
+	Code: 40001,
+	Msg:  "Invalid long url",
+}
 
 var InvalidAliasError = ErrorInfo{
 	Code: 40002,

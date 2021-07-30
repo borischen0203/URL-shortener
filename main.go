@@ -5,6 +5,8 @@ import (
 	"url-shortener/database"
 	"url-shortener/logger"
 	"url-shortener/router"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func Setup() {
@@ -16,5 +18,5 @@ func Setup() {
 
 func main() {
 	Setup()
-	router.Router.Run(":" + config.Env.Port)
+	router.Router.Run(":" + config.Env.PORT)
 }

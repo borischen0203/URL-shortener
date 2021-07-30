@@ -10,10 +10,10 @@ package handlers
  */
 
 import (
-	"log"
+	// "fmt"
+
 	"net/http"
 
-	"url-shortener/database"
 	"url-shortener/dto"
 	"url-shortener/errors"
 	"url-shortener/logger"
@@ -30,9 +30,9 @@ import (
 // @Produce json
 // @Param body body dto.UrlShortenerRequest true "body"
 // @Success 200 {object} dto.UrlResponse "ok"
-// @Failure 400 {string} errors.InvalidAliasError "bad request"
+// @Failure 400 {object} errors.ErrorInfo "bad request"
 // @Failure 403 {object} errors.ErrorInfo "Forbiden"
-// @Failure 500 {object} errors.ErrorInfo "internal server error"
+// @Failure 500 {object} errors.ErrorInfo "Internal server error"
 // @Router /api/url-shortener/v1/url [post]
 func GenerateShortUrl(c *gin.Context) {
 	request := dto.UrlShortenerRequest{}
@@ -54,22 +54,31 @@ func GenerateShortUrl(c *gin.Context) {
 	}
 }
 
-//commit test
+// @Summary Redirect original URL by short URL
+// @Description Redirect original URL by short URL
+// @Tags Shorten Url
+// @Accept json
+// @Produce json
+// @Param body body dto.UrlShortenerRequest true "body"
+// @Success 200 {object} dto.UrlResponse "Redirect"
+// @Failure 404 {object} errors.ErrorInfo "Not found"
+// @Failure 500 {object} errors.ErrorInfo "Internal server error"
+// @Router /:id [get]
 func GetLongUrl(c *gin.Context) {
-	id := c.Param("id")
-	result, err := services.GetUrlById(id)
-	if err != nil {
-		log.Printf("[GetLongUrl] search db error: %v\n", err)
-		c.JSON(http.StatusInternalServerError, errors.InternalServerError)
-		return
-	}
-	if (result == database.Url{}) {
-		log.Printf("[GetLongUrl] Url is not found: %v\n", err)
-		c.JSON(http.StatusNotFound, errors.UrlNotFoundError)
-		return
-	}
+	request := dto.RedirectRequest{Id: c.Param("id")}
+	response := dto.UrlResponse{}
+	logger.Info.Printf("[GetLongUrlHandler] request=%+v\n", request)
+	statusCode, result, err := services.GetOriginalUrlService(request, response)
 
-	location := result.LongUrl
-	c.Redirect(http.StatusFound, location)
+	switch statusCode {
+	case 200:
+		c.Redirect(http.StatusFound, result.LongUrl)
+	case 404:
+		c.JSON(http.StatusNotFound, err)
+	case 500:
+		c.JSON(http.StatusInternalServerError, err)
+	default:
+		c.JSON(http.StatusInternalServerError, errors.InternalServerError)
+	}
 
 }
