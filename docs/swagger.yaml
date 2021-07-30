@@ -1,4 +1,11 @@
 definitions:
+  dto.UrlResponse:
+    properties:
+      longUrl:
+        type: string
+      shortUrl:
+        type: string
+    type: object
   dto.UrlShortenerRequest:
     properties:
       alias:
@@ -8,6 +15,13 @@ definitions:
         type: string
     required:
     - longUrl
+    type: object
+  errors.ErrorInfo:
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
     type: object
 info:
   contact: {}
@@ -30,7 +44,19 @@ paths:
         "200":
           description: ok
           schema:
+            $ref: '#/definitions/dto.UrlResponse'
+        "400":
+          description: bad request
+          schema:
             type: string
+        "403":
+          description: Forbiden
+          schema:
+            $ref: '#/definitions/errors.ErrorInfo'
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/errors.ErrorInfo'
       summary: create shortening url
       tags:
       - Shorten Url

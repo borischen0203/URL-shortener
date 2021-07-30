@@ -52,7 +52,25 @@ var doc = `{
                     "200": {
                         "description": "ok",
                         "schema": {
+                            "$ref": "#/definitions/dto.UrlResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
                             "type": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbiden",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorInfo"
                         }
                     }
                 }
@@ -86,6 +104,17 @@ var doc = `{
         }
     },
     "definitions": {
+        "dto.UrlResponse": {
+            "type": "object",
+            "properties": {
+                "longUrl": {
+                    "type": "string"
+                },
+                "shortUrl": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.UrlShortenerRequest": {
             "type": "object",
             "required": [
@@ -97,6 +126,17 @@ var doc = `{
                 },
                 "longUrl": {
                     "description": "LongUrl string ` + "`" + `json:\"long_url\" binding:\"required, NotEmptyValidator\"` + "`" + `",
+                    "type": "string"
+                }
+            }
+        },
+        "errors.ErrorInfo": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "msg": {
                     "type": "string"
                 }
             }

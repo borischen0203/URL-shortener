@@ -34,7 +34,7 @@ func SetupRouter() *gin.Engine {
 	router.GET("/health", handlers.HealthHandler)
 	router.GET("/version", handlers.VersionHandler)
 
-	// router.GET(("/:id"), handlers.GetLongUrl)
+	router.GET(("/:id"), handlers.GetLongUrl)
 	router.POST("/api/url-shortener/v1/url", handlers.GenerateShortUrl)
 	return router
 }

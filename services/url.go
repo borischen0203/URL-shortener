@@ -28,8 +28,8 @@ import (
 )
 
 func GenerateShortUrlService(request dto.UrlShortenerRequest, response dto.UrlResponse) (int64, dto.UrlResponse, e.ErrorInfo) {
-	if !request.Validate() {
-		return 400, response, e.BadRequestError
+	if ok, err := request.Validate(); !ok {
+		return 400, response, err
 	}
 
 	if isAlias(request) {

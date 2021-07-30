@@ -37,7 +37,6 @@ func Setup() {
 
 	logger.Info.Printf("Connected to MongoDB")
 
-	// UrlCollection = client.Database(databaseUrl).Collection(collectionurlInfo)
 	UrlCollection = client.Database(config.Env.DBName).Collection(config.Env.UrlInfoCollectionName)
 	if UrlCollection == nil {
 		log.Fatalf("collection is nil")

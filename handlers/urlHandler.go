@@ -29,7 +29,10 @@ import (
 // @Accept json
 // @Produce json
 // @Param body body dto.UrlShortenerRequest true "body"
-// @Success 200 {string} string "ok"
+// @Success 200 {object} dto.UrlResponse "ok"
+// @Failure 400 {string} errors.InvalidAliasError "bad request"
+// @Failure 403 {object} errors.ErrorInfo "Forbiden"
+// @Failure 500 {object} errors.ErrorInfo "internal server error"
 // @Router /api/url-shortener/v1/url [post]
 func GenerateShortUrl(c *gin.Context) {
 	request := dto.UrlShortenerRequest{}
