@@ -24,6 +24,7 @@ import (
 var GenerateUrl = "/api/url-shortener/v1/url"
 
 func TestMain(m *testing.M) {
+	logger.Setup()
 	r := m.Run()
 
 	if r == 0 && testing.CoverMode() != "" {
@@ -60,6 +61,8 @@ func TestVersion(t *testing.T) {
 }
 
 //Should return 200 with long URL and short URL(generate new one) when long URL is unused
+
+//Should return 200 with long URL and short URL(existing) when long URL is used
 func TestGenerateUrl(t *testing.T) {
 	logger.Setup()
 	config.Setup()
@@ -70,7 +73,6 @@ func TestGenerateUrl(t *testing.T) {
 
 	requestBody := dto.UrlShortenerRequest{
 		LongUrl: "https://www.youtube.com/",
-		Alias:   "",
 	}
 	responseBody := dto.UrlResponse{
 		LongUrl:  "https://www.youtube.com/",
@@ -78,18 +80,15 @@ func TestGenerateUrl(t *testing.T) {
 	}
 
 	request, _ := json.Marshal(requestBody)
-	expectedBody, _ := json.Marshal(responseBody)
+	expected, _ := json.Marshal(responseBody)
 
 	req, _ := http.NewRequest(http.MethodPost, GenerateUrl, strings.NewReader(string(request)))
 
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, string(expectedBody), w.Body.String())
-	fmt.Println(w.Body.String())
+	assert.Equal(t, string(expected), w.Body.String())
 }
-
-//Should return 200 with long URL and short URL(existing) when long URL is used
 
 //Should return 200 with long URL and short URL(generate new one wt alias) when alias is unused
 
@@ -120,7 +119,20 @@ func TestInvalidAlias(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
-	fmt.Println(w.Body.String())
+}
+
+//Should return 302 when short URL is valid
+func TestShortUrlIsValid(t *testing.T) {
+	logger.Setup()
+	config.Setup()
+	database.Setup()
+
+	router := router.SetupRouter()
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodGet, "http://localhost:8080/myYoutube", nil)
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusFound, w.Code)
 }
 
 //Should return 400 when longUrl field is empty
@@ -141,7 +153,6 @@ func TestEmptyLongUrlFields(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
-	fmt.Println(w.Body.String())
 }
 
 //Should return 400 when longUrl field is missing
@@ -161,7 +172,6 @@ func TestMissingLongUrlFields(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
-	fmt.Println(w.Body.String())
 }
 
 //Should return 400 when longUrl is invalid
@@ -187,7 +197,6 @@ func TestAliasIsInvalid(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), actual)
-	fmt.Println(w.Body.String())
 }
 
 //Should return 403 when alias is used by the other long URL
@@ -213,7 +222,23 @@ func TestForbiddenAlias(t *testing.T) {
 
 	assert.Equal(t, http.StatusForbidden, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
-	fmt.Println(w.Body.String())
 }
 
 //Should return 404 when short url is not found
+func TestShortUrlNotFound(t *testing.T) {
+	logger.Setup()
+	config.Setup()
+	database.Setup()
+
+	router := router.SetupRouter()
+	w := httptest.NewRecorder()
+
+	expected, _ := json.Marshal(errors.UrlNotFoundError)
+
+	req, _ := http.NewRequest(http.MethodGet, "http://localhost:8080/notFound", nil)
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	assert.Equal(t, string(expected), w.Body.String())
+}

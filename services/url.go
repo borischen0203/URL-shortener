@@ -2,11 +2,6 @@ package services
 
 /**
  * This services mainly handle mongoDB operation
- *  1.CreatShortURL
- * 	2.CreateShortUrlByAlias
- *  3.GetShortUrlByLongUrl
- * 	4.etUrlById
- *  5.InsertUrlDocument
  *
  * @author: Boris
  * @version: 2021-07-12
@@ -57,6 +52,7 @@ func GenerateShortUrlService(request dto.UrlShortenerRequest, response dto.UrlRe
 	return 200, jsonMapping(result, response), e.NoError
 }
 
+//Get original URL service
 func GetOriginalUrlService(request dto.RedirectRequest, response dto.UrlResponse) (int64, dto.UrlResponse, e.ErrorInfo) {
 	result, err := GetUrlById(request.Id)
 	if err != nil {
