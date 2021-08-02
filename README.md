@@ -51,10 +51,10 @@ Project information and existing API
 
 ### API example
 ```
-    $ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.google.com/", "alias":"myGoogle"}' "http://localhost:8080/api/url-shortener/v1/url"
+$ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.google.com/", "alias":"myGoogle"}' "http://localhost:8080/api/url-shortener/v1/url"
 ```
 
-## Tech Stack
+### Tech Stack
     - RESTful API
     - Swagger
     - logging
