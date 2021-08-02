@@ -1,5 +1,10 @@
 # URL-shortener
 
+## Features
+- Generate short URL by long URL
+- Redirect to long URL by generated URL
+- URL generation supports custom alias
+
 ## How to run
 
 ### Required
@@ -9,7 +14,7 @@
 
 ### Ready
 
-Download docker and mongodb3.6.23
+Download docker and mongodb3.6.23 image
 
 ### Conf
 
@@ -46,12 +51,12 @@ Project information and existing API
 
 ### API example
 ```
-$ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.google.com/", "alias":"myGoogle"}' "http://localhost:8080/api/url-shortener/v1/url"
+    $ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.google.com/", "alias":"myGoogle"}' "http://localhost:8080/api/url-shortener/v1/url"
 ```
 
-## Features
-
-- RESTful API
-- Swagger
-- logging
-- Gin
+## Tech Stack
+    - RESTful API
+    - Swagger
+    - logging
+    - Gin
+    - MongoDB
