@@ -3,7 +3,7 @@ name: Build and Test
 on:
   push:
     branches: [ main ]
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,13 +12,13 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Set up mongo Docker container
-      id: build_mongo_docker
+      # id: build_mongo_docker
       uses: DigiPie/mongo-action@v1.0.1
       with:
         image-version: latest
         port: 27017
     - name: Test mongo connection
-      id: test_mongo_connection
+      # id: test_mongo_connection
       run: "sudo mongo localhost:27017"
 
 
