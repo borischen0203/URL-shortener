@@ -1,0 +1,34 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+    - uses: actions/checkout@v2
+
+    - name: Set up mongo Docker container
+      id: build_mongo_docker
+      uses: DigiPie/mongo-action@v1.0.1
+      with:
+        image-version: latest
+        port: 27017
+    - name: Test mongo connection
+      id: test_mongo_connection
+      run: "sudo mongo localhost:27017"
+
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
