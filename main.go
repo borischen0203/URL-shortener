@@ -18,5 +18,5 @@ func Setup() {
 
 func main() {
 	Setup()
-	router.Router.Run(":" + config.Env.PORT)
+	router.Router.Run()
 }
