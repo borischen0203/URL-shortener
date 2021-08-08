@@ -103,22 +103,22 @@ func TestValidAlias(t *testing.T) {
 
 	requestBody := dto.UrlShortenerRequest{
 		LongUrl: "https://www.youtube.com/",
-		Alias:   "myYoutube",
+		Alias:   "testForYoutube",
 	}
-	// responseBody := dto.UrlResponse{
-	// 	LongUrl:  "https://www.youtube.com/",
-	// 	ShortUrl: "http://localhost:8080/myYoutube",
-	// }
+	responseBody := dto.UrlResponse{
+		LongUrl:  "https://www.youtube.com/",
+		ShortUrl: "http://localhost:8080/testForYoutube",
+	}
 
 	request, _ := json.Marshal(requestBody)
-	// expected, _ := json.Marshal(responseBody)
+	expected, _ := json.Marshal(responseBody)
 
 	req, _ := http.NewRequest(http.MethodPost, GenerateUrl, strings.NewReader(string(request)))
 
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	// assert.Equal(t, string(expected), w.Body.String())
+	assert.Equal(t, string(expected), w.Body.String())
 }
 
 //Should return 302 when short URL is valid
