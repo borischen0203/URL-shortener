@@ -129,7 +129,7 @@ func TestShortUrlIsValid(t *testing.T) {
 
 	router := router.SetupRouter()
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodGet, "http://localhost:8080/myYoutube", nil)
+	req, _ := http.NewRequest(http.MethodGet, "http://localhost:8080/testForYoutube", nil)
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusFound, w.Code)
@@ -210,7 +210,7 @@ func TestForbiddenAlias(t *testing.T) {
 
 	requestBody := dto.UrlShortenerRequest{
 		LongUrl: "https://www.gogole.com/",
-		Alias:   "myYoutube",
+		Alias:   "testForYoutube",
 	}
 
 	request, _ := json.Marshal(requestBody)
