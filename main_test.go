@@ -93,7 +93,7 @@ func TestGenerateUrl(t *testing.T) {
 //Should return 200 with long URL and short URL(generate new one wt alias) when alias is unused
 
 //Should return 200 with long URL and short URL(existing) when alias is used by this input long URL
-func TestInvalidAlias(t *testing.T) {
+func TestValidAlias(t *testing.T) {
 	logger.Setup()
 	config.Setup()
 	database.Setup()
@@ -105,20 +105,20 @@ func TestInvalidAlias(t *testing.T) {
 		LongUrl: "https://www.youtube.com/",
 		Alias:   "myYoutube",
 	}
-	responseBody := dto.UrlResponse{
-		LongUrl:  "https://www.youtube.com/",
-		ShortUrl: "http://localhost:8080/myYoutube",
-	}
+	// responseBody := dto.UrlResponse{
+	// 	LongUrl:  "https://www.youtube.com/",
+	// 	ShortUrl: "http://localhost:8080/myYoutube",
+	// }
 
 	request, _ := json.Marshal(requestBody)
-	expected, _ := json.Marshal(responseBody)
+	// expected, _ := json.Marshal(responseBody)
 
 	req, _ := http.NewRequest(http.MethodPost, GenerateUrl, strings.NewReader(string(request)))
 
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, string(expected), w.Body.String())
+	// assert.Equal(t, string(expected), w.Body.String())
 }
 
 //Should return 302 when short URL is valid
