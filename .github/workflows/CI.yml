@@ -37,5 +37,5 @@ jobs:
           heroku_app_name: "short-url-sample" #Must be unique in Heroku
           heroku_email: "borischen0203@gmail.com"
           usedocker: true
-    needs: [ci]
+    needs: [build]
 
