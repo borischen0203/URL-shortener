@@ -8,7 +8,9 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+
     steps:
+    - name: Checkout code
     - uses: actions/checkout@v2
 
     - name: Set up mongo Docker container
@@ -22,7 +24,7 @@ jobs:
       id: test_mongo_connection
       run: "sudo mongo localhost:27017"
 
-    - name: Set up Go
+    - name: Install Go
       uses: actions/setup-go@v2
       with:
         go-version: 1.16
