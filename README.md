@@ -9,6 +9,15 @@ This is a URL shortener service. You can generate a short URL by a long URL.
 - Redirect to long URL by generated URL
 - URL generation supports custom alias
 
+## Demo
+- No need to run main.go file, you can type the below command in the terminal directly.
+- The app may sleep without using. Just wait for a few seconds to wake it up.
+```
+$ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.youtube.com/", "alias":""}' "https://short-url-sample.herokuapp.com/api/url-shortener/v1/url"
+```
+
+
+
 ### Required
 
 - Golang
@@ -16,7 +25,8 @@ This is a URL shortener service. You can generate a short URL by a long URL.
 - Docker
 - MongoDB
 
-## How to run
+
+## How to run in local
 
 ### Ready
 ```
@@ -34,12 +44,8 @@ Local
 ```
 $ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.youtube.com/", "alias":""}' "http://localhost:8080/api/url-shortener/v1/url"
 ```
-Demo
-```
-$ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.youtube.com/", "alias":""}' "https://short-url-sample.herokuapp.com/api/url-shortener/v1/url"
-```
 
-Project information and existing API
+## Project information and existing API
 
 ```
 [GET]    /swagger/*any
@@ -58,3 +64,4 @@ Project information and existing API
     - Docker
     - Github action(CI)
     - Heroku (CD)
+
