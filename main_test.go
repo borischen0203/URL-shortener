@@ -24,7 +24,6 @@ import (
 var GenerateUrl = "/api/url-shortener/v1/url"
 
 func TestMain(m *testing.M) {
-	logger.Setup()
 	r := m.Run()
 
 	if r == 0 && testing.CoverMode() != "" {
@@ -61,9 +60,7 @@ func TestVersion(t *testing.T) {
 }
 
 //Should return 200 with long URL and short URL(generate new one) when long URL is unused
-
-//Should return 200 with long URL and short URL(existing) when long URL is used
-func TestGenerateUrl(t *testing.T) {
+func TestGenerateUrlIsNotUsed(t *testing.T) {
 	logger.Setup()
 	config.Setup()
 	database.Setup()
@@ -74,23 +71,60 @@ func TestGenerateUrl(t *testing.T) {
 	requestBody := dto.UrlShortenerRequest{
 		LongUrl: "https://www.youtube.com/",
 	}
-	// responseBody := dto.UrlResponse{
-	// 	LongUrl:  "https://www.youtube.com/",
-	// 	ShortUrl: "http://localhost:8080/gJXz8NqV7N40l",
-	// }
 
 	request, _ := json.Marshal(requestBody)
-	// expected, _ := json.Marshal(responseBody)
 
 	req, _ := http.NewRequest(http.MethodPost, GenerateUrl, strings.NewReader(string(request)))
 
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	// assert.Equal(t, string(expected), w.Body.String())
 }
 
-//Should return 200 with long URL and short URL(generate new one wt alias) when alias is unused
+//Should return 200 with long URL and short URL(existing) when long URL is used
+func TestGenerateUrlIsUsed(t *testing.T) {
+	logger.Setup()
+	config.Setup()
+	database.Setup()
+
+	router := router.SetupRouter()
+	w := httptest.NewRecorder()
+
+	requestBody := dto.UrlShortenerRequest{
+		LongUrl: "https://www.youtube.com/",
+	}
+
+	request, _ := json.Marshal(requestBody)
+
+	req, _ := http.NewRequest(http.MethodPost, GenerateUrl, strings.NewReader(string(request)))
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+}
+
+//Should return 200 with long URL and short URL(generate new one with alias) when alias is unused
+func TestAliaslIsUsed(t *testing.T) {
+	logger.Setup()
+	config.Setup()
+	database.Setup()
+
+	router := router.SetupRouter()
+	w := httptest.NewRecorder()
+
+	requestBody := dto.UrlShortenerRequest{
+		LongUrl: "https://www.youtube.com/",
+		Alias:   "unusedAlias",
+	}
+
+	request, _ := json.Marshal(requestBody)
+
+	req, _ := http.NewRequest(http.MethodPost, GenerateUrl, strings.NewReader(string(request)))
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+}
 
 //Should return 200 with long URL and short URL(existing) when alias is used by this input long URL
 func TestValidAlias(t *testing.T) {
