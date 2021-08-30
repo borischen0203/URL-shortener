@@ -1,3 +1,5 @@
+![Gin gopher](https://raw.githubusercontent.com/scraly/gophers/main/mojito-gopher.png)
+
 [![CICD](https://github.com/borischen0203/URL-shortener/actions/workflows/CICD.yml/badge.svg)](https://github.com/borischen0203/URL-shortener/actions/workflows/CICD.yml)
 
 # URL-shortener service
