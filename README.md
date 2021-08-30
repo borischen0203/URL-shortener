@@ -1,9 +1,8 @@
 [![CICD](https://github.com/borischen0203/URL-shortener/actions/workflows/CICD.yml/badge.svg)](https://github.com/borischen0203/URL-shortener/actions/workflows/CICD.yml)
 
+# URL-shortener service
 This is a URL shortener service. You can generate a short URL by a long URL.
  Moreover, you can make your alias of short URL.
-
-# URL-shortener service
 
 ## Features
 
