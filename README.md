@@ -1,3 +1,5 @@
+[![CICD](https://github.com/borischen0203/URL-shortener/actions/workflows/CICD.yml/badge.svg)](https://github.com/borischen0203/URL-shortener/actions/workflows/CICD.yml)
+
 This is a URL shortener service. You can generate a short URL by a long URL.
  Moreover, you can make your alias of short URL.
 
@@ -12,8 +14,8 @@ This is a URL shortener service. You can generate a short URL by a long URL.
 ## Demo
 - No need to run main.go file, you can type the below command in the terminal directly.
 - The app may sleep without using. Just wait for a few seconds to wake it up.
-```
-$ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.youtube.com/", "alias":""}' "https://short-url-sample.herokuapp.com/api/url-shortener/v1/url"
+```bash
+> curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.youtube.com/", "alias":""}' "https://short-url-sample.herokuapp.com/api/url-shortener/v1/url"
 ```
 
 
@@ -33,11 +35,18 @@ $ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www
 Download docker and mongodb3.6 image
 ```
 ### Run
-```
-$ docker run -p 27017:27017 mongo:3.6
+```bash
+> docker run -p 27017:27017 mongo:3.6
 
-$ go run main.go
+> go run main.go
 ```
+
+## Project information and existing API
+- `GET`    /swagger/*any
+- `GET`    /health
+- `GET`    /version
+- `GET`    /:id
+- `POST`   /api/url-shortener/v1/url
 
 ### API example
 Local
@@ -45,15 +54,8 @@ Local
 $ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.youtube.com/", "alias":""}' "http://localhost:8080/api/url-shortener/v1/url"
 ```
 
-## Project information and existing API
 
-```
-[GET]    /swagger/*any
-[GET]    /health
-[GET]    /version
-[GET]    /:id
-[POST]   /api/url-shortener/v1/url
-```
+
 
 ### Tech Stack
     - RESTful API
