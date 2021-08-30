@@ -17,7 +17,15 @@ This is a URL shortener service. You can generate a short URL by a long URL.
 > curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.youtube.com/", "alias":""}' "https://short-url-sample.herokuapp.com/api/url-shortener/v1/url"
 ```
 
+## Project information and existing API
+- `GET`    /swagger/*any
+- `GET`    /health
+- `GET`    /version
+- `GET`    /:id
+- `POST`   /api/url-shortener/v1/url
 
+
+## How to run in local
 
 ### Required
 
@@ -26,31 +34,20 @@ This is a URL shortener service. You can generate a short URL by a long URL.
 - Docker
 - MongoDB
 
-
-## How to run in local
-
-### Ready
-```
-Download docker and mongodb3.6 image
-```
 ### Run
 ```bash
+> docker pull mongo:3.6
+
 > docker run -p 27017:27017 mongo:3.6
 
 > go run main.go
 ```
 
-## Project information and existing API
-- `GET`    /swagger/*any
-- `GET`    /health
-- `GET`    /version
-- `GET`    /:id
-- `POST`   /api/url-shortener/v1/url
 
-### API example
-Local
-```
-$ curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.youtube.com/", "alias":""}' "http://localhost:8080/api/url-shortener/v1/url"
+
+### Demo in local
+```bash
+> curl -X POST -H "Content-Type: application/json" -d '{"longUrl" : "https://www.youtube.com/", "alias":""}' "http://localhost:8080/api/url-shortener/v1/url"
 ```
 
 
