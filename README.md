@@ -65,3 +65,8 @@ This is a URL shortener service. You can generate a short URL by a long URL.
     - Github action(CI)
     - Heroku (CD)
 
+### Todo
+- [ ] mongoDB add expired time field
+- [ ] Add redis for cache
+- [ ] MockDB for testing
+- [ ] Deploy to AWS
