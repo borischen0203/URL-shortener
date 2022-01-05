@@ -66,7 +66,7 @@ func GenerateShortUrl(c *gin.Context) {
 // @Router /:id [get]
 func GetLongUrl(c *gin.Context) {
 	request := dto.RedirectRequest{Id: c.Param("id")}
-	response := dto.UrlResponse{}
+	// response := dto.UrlResponse{}
 	logger.Info.Printf("[GetLongUrlHandler] request=%+v\n", request)
 	statusCode, result, err := services.GetOriginalUrlService(request, response)
 
